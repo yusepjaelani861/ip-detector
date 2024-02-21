@@ -1,4 +1,5 @@
 import geoip2.database
+from .proxy import check_proxy
 
 class MaxMind:
     def __init__(self):
@@ -11,6 +12,9 @@ class MaxMind:
             city = self.reader_city.city(ip)
             country = self.reader_country.country(ip)
             asn = self.reader_asn.asn(ip)
+
+            checkProxy = check_proxy(ip)
+
             return {
                 "status": "success",
                 "ip": ip,
@@ -44,6 +48,10 @@ class MaxMind:
                     if asn.autonomous_system_organization
                     else ""
                 ),
+                "proxy": (
+                    checkProxy["proxy"] if checkProxy["status"] == "success" else ""
+                ),
+                "type": checkProxy["type"] if checkProxy["status"] == "success" else "",
             }
         except Exception as e:
             return {"status": "error", "message": str(e)}
