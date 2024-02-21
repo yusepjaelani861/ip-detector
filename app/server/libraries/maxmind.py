@@ -4,11 +4,13 @@ class MaxMind:
     def __init__(self):
         self.reader_city = geoip2.database.Reader('server/libraries/GeoLite2-City.mmdb')
         self.reader_country = geoip2.database.Reader('server/libraries/GeoLite2-Country.mmdb')
+        self.reader_asn = geoip2.database.Reader('server/libraries/GeoLite2-ASN.mmdb')
 
     def get_location(self, ip):
         try:
             city = self.reader_city.city(ip)
             country = self.reader_country.country(ip)
+            asn = self.reader_asn.asn(ip)
             return {
                 "status": "success",
                 "ip": ip,
@@ -36,6 +38,11 @@ class MaxMind:
                 "lon": (city.location.longitude if city.location.longitude else ""),
                 "timezone": (
                     city.location.time_zone if city.location.time_zone else ""
+                ),
+                "isp": (
+                    asn.autonomous_system_organization
+                    if asn.autonomous_system_organization
+                    else ""
                 ),
             }
         except Exception as e:
