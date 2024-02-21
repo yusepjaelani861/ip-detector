@@ -4,7 +4,7 @@ from .libraries.maxmind import MaxMind
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/ip-json")
 async def root(request: Request):
     try:
         ip = get_ip(request)
@@ -21,7 +21,7 @@ async def root(request: Request):
         )
 
 
-@app.get("/{ip}")
+@app.get("/ip-json/{ip}")
 async def get_ip(ip: str):
     try:
         validate_ip(ip)
