@@ -7,7 +7,7 @@ app = FastAPI()
 @app.get("/")
 async def root(request: Request):
     try:
-        ip = request.client.host
+        ip = get_ip(request)
         maxmind = MaxMind()
         response = maxmind.get_location(ip)
         return JSONResponse(content=response, status_code=200)
@@ -51,3 +51,16 @@ def validate_ip(ip):
         num = int(part)
         if num < 0 or num > 255:
             raise ValueError("Invalid IP address")
+
+def get_ip(request: Request):
+    if 'HTTP_CLIENT_IP' in request.headers:
+        ip = request.headers['HTTP_CLIENT_IP']
+    elif 'HTTP_X_FORWARDED_FOR' in request.headers:
+        ip = request.headers['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.client.host
+        
+    data = ip.split(',')
+    ip = data[0].strip()
+    
+    return ip
