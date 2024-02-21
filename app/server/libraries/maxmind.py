@@ -3,9 +3,9 @@ from .proxy import check_proxy
 
 class MaxMind:
     def __init__(self):
-        self.reader_city = geoip2.database.Reader('app/server/libraries/GeoLite2-City.mmdb')
-        self.reader_country = geoip2.database.Reader('app/server/libraries/GeoLite2-Country.mmdb')
-        self.reader_asn = geoip2.database.Reader('app/server/libraries/GeoLite2-ASN.mmdb')
+        self.reader_city = geoip2.database.Reader('server/libraries/GeoLite2-City.mmdb')
+        self.reader_country = geoip2.database.Reader('server/libraries/GeoLite2-Country.mmdb')
+        self.reader_asn = geoip2.database.Reader('server/libraries/GeoLite2-ASN.mmdb')
 
     def get_location(self, ip):
         try:
